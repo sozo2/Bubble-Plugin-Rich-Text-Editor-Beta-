@@ -1,0 +1,116 @@
+{
+    "add_hover_pressed": false,
+    "add_is_visible": true,
+    "autobinding_value": "text",
+    "category": "input forms",
+    "default_dim": {
+        "height": 200,
+        "width": 400
+    },
+    "display": "Rich Text Input",
+    "events": {
+        "AAf": {
+            "caption": "value changes",
+            "name": "value_changes"
+        }
+    },
+    "fields": {
+        "AAD": {
+            "caption": "Initial Content",
+            "editor": "DynamicValue",
+            "long_text": true,
+            "name": "initial_content",
+            "optional": true,
+            "rank": 1,
+            "value": "text"
+        },
+        "AAZ": {
+            "caption": "Regular or Tooltip?",
+            "default_val": "Regular",
+            "editor": "Dropdown",
+            "in_style": true,
+            "name": "theme",
+            "options": "Regular,Tooltip",
+            "rank": 2
+        },
+        "AAa": {
+            "caption": "Style Complexity",
+            "default_val": "Full",
+            "doc": "Select more or less style options depending on need",
+            "editor": "Dropdown",
+            "in_style": true,
+            "name": "complexity",
+            "options": "Basic,Full",
+            "rank": 3
+        },
+        "AAb": {
+            "caption": "Extend to fit",
+            "default_val": false,
+            "editor": "Checkbox",
+            "in_style": true,
+            "name": "overflow",
+            "options": "Scroll,Extend to fit",
+            "rank": 4
+        },
+        "AAc": {
+            "caption": "Placeholder",
+            "editor": "DynamicValue",
+            "name": "placeholder",
+            "optional": true,
+            "rank": 0,
+            "value": "text"
+        },
+        "AAd": {
+            "caption": "This input shouldn't be empty",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "empty",
+            "rank": 5
+        },
+        "AAe": {
+            "caption": "This input is disabled ",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "disabled",
+            "rank": 6
+        }
+    },
+    "has_reset_fn": false,
+    "icon": "ion-android-list",
+    "property_applications": {
+        "Background": true,
+        "Border": true,
+        "BoxShadow": true,
+        "Font": false,
+        "MinWidth": true,
+        "Padding": true,
+        "resizable": true
+    },
+    "states": {
+        "AAE": {
+            "caption": "value",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\tif(properties.initial_content){\n        return properties.initial_content;\n    } else {\n        return \"\";\n    }\n    \n}"
+            },
+            "name": "value",
+            "value": "text"
+        },
+        "AAg": {
+            "caption": "value is valid",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\tif(properties.empty==true && properties.initial_content==null){\n        return false;\n    } else {\n        return true; \n    }\n\n}"
+            },
+            "name": "value_is_valid",
+            "value": "boolean"
+        },
+        "AAx": {
+            "caption": "field is focused",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\treturn false;\n\n}"
+            },
+            "name": "field_is_focused",
+            "value": "boolean"
+        }
+    },
+    "support_autobinding": true
+}

@@ -1,0 +1,59 @@
+{
+    "assets": {
+        "AAk": {
+            "name": "basic text styles",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328422624x814410333288381700/basic_styles.png"
+        },
+        "AAl": {
+            "name": "basic text alignment",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328435036x176083124177772740/basic_align.png"
+        },
+        "AAm": {
+            "name": "font",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328456820x636678729904445200/font.png"
+        },
+        "AAn": {
+            "name": "size",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328471900x601277843539461200/size.png"
+        },
+        "AAo": {
+            "name": "text styles",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328500984x237729254917328450/text_styles.png"
+        },
+        "AAq": {
+            "name": "superscript / subscript",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328553500x547904523073018600/sup_sub.png"
+        },
+        "AAr": {
+            "name": "titles + quotes + code",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328573740x193466729817275650/titles_quote_code.png"
+        },
+        "AAu": {
+            "name": "media",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328690820x732983396842500400/media.png"
+        },
+        "AAv": {
+            "name": "remove styling",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578328704608x655581645962726700/remove_style.png"
+        },
+        "AAw": {
+            "name": "image resize",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578505727502x331108150766255900/image-resize.min.js"
+        },
+        "AAz": {
+            "name": "color + highlight",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1578526040133x618924377176704400/text_color.png"
+        },
+        "ABC": {
+            "name": "list",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1580145133799x948312827511517800/list.png"
+        },
+        "ABD": {
+            "name": "indent + align",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1580145152691x503666194763457100/indent_align.png"
+        }
+    },
+    "dependencies": {
+        "use_jquery": true
+    }
+}
