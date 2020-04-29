@@ -1,5 +1,19 @@
 function(instance, properties, context) {
-        
+    
+    var all_fonts = ['sans-serif', 'abeezee', 'abril-fatface', 'alegreya', 'archivo', 'arial', 'arvo', 'biorhyme', 'b612', 'cairo', 'cardo', 'concert-one', 'cormorant', 'cousine', 'crimson-text', 'droid-sans', 'droid-serif', 'eb-garamond', 'exo-2', 'fira-sans', 'fjalla-one', 'frank-ruhl-libre', 'karla', 'ibm-plex', 'lato', 'lora', 'merriweather', 'mizra', 'monospace', 'montserrat', 'muli', 'noto-sans', 'nunito', 'old-standard-tt', 'open-sans', 'oswald', 'oxygen', 'playfair-display', 'pt-sans', 'pt-serif', 'poppins', 'rakkas', 'raleway', 'roboto', 'rubik', 'serif', 'source-sans', 'source-sans-pro', 'spectral', 'times-new-roman', 'tinos', 'titillium', 'ubuntu','varela','volkorn','work-sans','yatra-one'];
+    
+    if(instance.data.initialized == false){
+        instance.data.prev_initial_content = properties.initial_content;
+    } 
+    
+    if(properties.initial_content != instance.data.prev_initial_content){
+        instance.data.prev_initial_content = properties.initial_content;
+        instance.data.initial_content_loaded = false;
+    }
+    
+    if(properties.initial_content == null && properties.bubble.auto_binding == true){
+        properties.initial_content = properties.autobinding;
+    }
     //function to check if the input is truly empty - runs under the assumption that an input should be considered empty if it contains a blank html tag but no text is actually written 
     var checkForContent = function(html){
         html = html.replace(/<(.*?)>(.*?)<\/(.*?)>/gmi, "$2");
@@ -18,6 +32,9 @@ function(instance, properties, context) {
 
         html = html.replace(/<h1(.*?)class="(.*?)ql-align-(right|center|justify)(.*?)"(.*?)>(.*?)<\/h1>/gmi, '[$3]<h1$1class="$2$4"$5>$6</h1>[/$3]');
         html = html.replace(/<h2(.*?)class="(.*?)ql-align-(right|center|justify)(.*?)"(.*?)>(.*?)<\/h2>/gmi, '[$3]<h2$1class="$2$4"$5>$6</h2>[/$3]');
+        html = html.replace(/<h3(.*?)class="(.*?)ql-align-(right|center|justify)(.*?)"(.*?)>(.*?)<\/h3>/gmi, '[$3]<h3$1class="$2$4"$5>$6</h3>[/$3]');
+        html = html.replace(/<h4(.*?)class="(.*?)ql-align-(right|center|justify)(.*?)"(.*?)>(.*?)<\/h4>/gmi, '[$3]<h4$1class="$2$4"$5>$6</h4>[/$3]');
+        
         html = html.replace(/<blockquote(.*?)class="(.*?)ql-align-(right|center|justify)(.*?)"(.*?)>(.*?)<\/blockquote>/gmi, '[$3]<blockquote$1class="$2$4"$5>$6</blockquote>[/$3]');
         html = html.replace(/<p (.*?)class="(.*?)ql-align-(right|center|justify)(.*?)"(.*?)>(.*?)<\/p>/gmi, '[$3]<p $1class="$2$4"$5>$6</p>[/$3]');
         html = html.replace(/<iframe class="ql-video ql-align-(right|center|justify)" frameborder="0" allowfullscreen="true" src="(.*?)"><\/iframe>/gmi, '[$1]<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="$2"></iframe>[/$1]');
@@ -92,6 +109,11 @@ function(instance, properties, context) {
         html = html.replace(/<h2>/gmi, "[h2]");
         html = html.replace(/<\/h1>/gmi, "[/h1]\n");
         html = html.replace(/<\/h2>/gmi, "[/h2]\n");
+        html = html.replace(/<h3>/gmi, "[h3]");
+        html = html.replace(/<h4>/gmi, "[h4]");
+        html = html.replace(/<\/h3>/gmi, "[/h3]\n");
+        html = html.replace(/<\/h4>/gmi, "[/h4]\n");
+        
         html = html.replace(/<sub>/gi, "[sub]");
         html = html.replace(/<\/sub>/gi, "[/sub]");
         html = html.replace(/<sup>/gi, "[sup]");
@@ -114,8 +136,8 @@ function(instance, properties, context) {
         html = html.replace(/<\/span>/gi, "");
         html = html.replace(/<\/p>/gi, "\n");     
         
-        html = html.replace(/http:\//gi, "http://");
-        html = html.replace(/https:\//gi, "https://");
+        html = html.replace(/http:\/\//gi, "http://");
+        html = html.replace(/https:\/\//gi, "https://");
                 
         html = html.replace(/\[\/center\]\[center\]<br>\n/gmi, "[/center]<buffer>[center]<br>\n");
         html = html.replace(/\[\/center\]\[center\]/gmi, "");
@@ -129,6 +151,7 @@ function(instance, properties, context) {
         
         html = html.replace(/&lt;/gmi, "<");
         html = html.replace(/&gt;/gmi, ">");
+        html = html.replace(/&amp;/gmi, "&");
         html = html.replace(/&nbsp;/gmi, " ");
         return html;
     }
@@ -146,6 +169,10 @@ function(instance, properties, context) {
             x = x.replace(/\[\/h1\]/gmi, "[/h1][/center]");
             x = x.replace(/\[h2\]/gmi, "[center][h2]"); 
             x = x.replace(/\[\/h2\]/gmi, "[/h2][/center]");
+            x = x.replace(/\[h3\]/gmi, "[center][h3]"); 
+            x = x.replace(/\[\/h3\]/gmi, "[/h3][/center]");
+            x = x.replace(/\[h4\]/gmi, "[center][h4]"); 
+            x = x.replace(/\[\/h4\]/gmi, "[/h4][/center]");
             x = x.replace(/\[quote\]/gmi, "[center][quote]"); 
             x = x.replace(/\[\/quote\]/gmi, "[/quote][/center]");
             x = x.replace(/\[youtube\]/gmi, "[center][youtube]"); 
@@ -162,6 +189,10 @@ function(instance, properties, context) {
             x = x.replace(/\[\/h1\]/gmi, "[/h1][/right]");
             x = x.replace(/\[h2\]/gmi, "[right][h2]"); 
             x = x.replace(/\[\/h2\]/gmi, "[/h2][/right]");
+            x = x.replace(/\[h3\]/gmi, "[right][h3]"); 
+            x = x.replace(/\[\/h3\]/gmi, "[/h3][/right]");
+            x = x.replace(/\[h4\]/gmi, "[right][h4]"); 
+            x = x.replace(/\[\/h4\]/gmi, "[/h4][/right]");
             x = x.replace(/\[quote\]/gmi, "[right][quote]"); 
             x = x.replace(/\[\/quote\]/gmi, "[/quote][/right]");
             x = x.replace(/\[youtube\]/gmi, "[right][youtube]"); 
@@ -178,6 +209,10 @@ function(instance, properties, context) {
             x = x.replace(/\[\/h1\]/gmi, "[/h1][/justify]");
             x = x.replace(/\[h2\]/gmi, "[justify][h2]"); 
             x = x.replace(/\[\/h2\]/gmi, "[/h2][/justify]");
+            x = x.replace(/\[h3\]/gmi, "[justify][h3]"); 
+            x = x.replace(/\[\/h3\]/gmi, "[/h3][/justify]");
+            x = x.replace(/\[h4\]/gmi, "[justify][h4]"); 
+            x = x.replace(/\[\/h4\]/gmi, "[/h4][/justify]");
             x = x.replace(/\[quote\]/gmi, "[justify][quote]"); 
             x = x.replace(/\[\/quote\]/gmi, "[/quote][/justify]");
             x = x.replace(/\[youtube\]/gmi, "[justify][youtube]"); 
@@ -189,24 +224,35 @@ function(instance, properties, context) {
         });
                             
         bbcode = bbcode.replace(/\[size=1\](.*?)\[\/size\]/gmi, '<span class="ql-size-small">$1</span>');
+        bbcode = bbcode.replace(/\[size=2\](.*?)\[\/size\]/gmi, '<span class="ql-size-small">$1</span>');
+        bbcode = bbcode.replace(/\[size=3\](.*?)\[\/size\]/gmi, '$1');
         bbcode = bbcode.replace(/\[size=4\](.*?)\[\/size\]/gmi, '<span class="ql-size-large">$1</span>');
+        bbcode = bbcode.replace(/\[size=5\](.*?)\[\/size\]/gmi, '<span class="ql-size-large">$1</span>');
         bbcode = bbcode.replace(/\[size=6\](.*?)\[\/size\]/gmi, '<span class="ql-size-huge">$1</span>');
+        bbcode = bbcode.replace(/\[size=7\](.*?)\[\/size\]/gmi, '<span class="ql-size-huge">$1</span>');
+        
         bbcode = bbcode.replace(/\[color=(.*?)\](.*?)\[\/color\]/gmi, '<span style="color:$1;">$2</span>');
         bbcode = bbcode.replace(/\[highlight=(.*?)\](.*?)\[\/highlight\]/gmi, '<span style="background-color:$1;">$2</span>');
         bbcode = bbcode.replace(/\[font=(.*?)\](.*?)\[\/font\]/gmi, '<span class="ql-font-$1">$2</span>');
                
         bbcode = bbcode.replace(/\[(center|right|justify)\]\[h1\]\[indent data=(.*?)\]/gmi, '<h1 class="ql-align-$1 ql-indent-$2">');
         bbcode = bbcode.replace(/\[(center|right|justify)\]\[h2\]\[indent data=(.*?)\]/gmi, '<h2 class="ql-align-$1 ql-indent-$2">');
+        bbcode = bbcode.replace(/\[(center|right|justify)\]\[h3\]\[indent data=(.*?)\]/gmi, '<h3 class="ql-align-$1 ql-indent-$2">');
+        bbcode = bbcode.replace(/\[(center|right|justify)\]\[h4\]\[indent data=(.*?)\]/gmi, '<h4 class="ql-align-$1 ql-indent-$2">');
         bbcode = bbcode.replace(/\[(center|right|justify)\]\[blockquote\]\[indent data=(.*?)\]/gmi, '<blockquote class="ql-align-$1 ql-indent-$2">');
 
         bbcode = bbcode.replace(/\[(center|right|justify)\]\[h1\]/gmi, '<h1 class="ql-align-$1">');
         bbcode = bbcode.replace(/\[(center|right|justify)\]\[h2\]/gmi, '<h1 class="ql-align-$1">');
+        bbcode = bbcode.replace(/\[(center|right|justify)\]\[h3\]/gmi, '<h3 class="ql-align-$1">');
+        bbcode = bbcode.replace(/\[(center|right|justify)\]\[h4\]/gmi, '<h4 class="ql-align-$1">');
         bbcode = bbcode.replace(/\[(center|right|justify)\]\[blockquote\]/gmi, '<blockquote class="ql-align-$1">');
         
         bbcode = bbcode.replace(/\[(center|right|justify)\]\[youtube\](.*?)\[\/youtube\]\[\/(center|right|justify)\]/gi, '<iframe class="ql-video ql-align-$1" frameborder="0" allowfullscreen="true" src="https://www.youtube.com/embed/$2?showinfo=0">'); 
 
         bbcode = bbcode.replace(/\[h1\]\[indent data=(.*?)\]/gmi, '<h1 class="ql-indent-$1">');
         bbcode = bbcode.replace(/\[h2\]\[indent data=(.*?)\]/gmi, '<h2 class="ql-indent-$1">');
+        bbcode = bbcode.replace(/\[h3\]\[indent data=(.*?)\]/gmi, '<h3 class="ql-indent-$1">');
+        bbcode = bbcode.replace(/\[h4\]\[indent data=(.*?)\]/gmi, '<h4 class="ql-indent-$1">');
         bbcode = bbcode.replace(/\[blockquote\]\[indent data=(.*?)\]/gmi, '<blockquote class="ql-indent-$1">');
         
         bbcode = bbcode.replace(/\[(center|right|justify)\]\[indent data=(.*?)\](.*?)\[\/indent\]\[\/(center|right|justify)\]/gmi, '<p class="ql-align-$1 ql-indent-$2">$3</p>');
@@ -233,10 +279,20 @@ function(instance, properties, context) {
         bbcode = bbcode.replace(/\[\/h1\]/gi, "</h1>");
         bbcode = bbcode.replace(/\[h2\]/gi, "<h2>");
         bbcode = bbcode.replace(/\[\/h2\]/gi, "</h2>");
+        bbcode = bbcode.replace(/\[h3\]/gi, "<h3>");
+        bbcode = bbcode.replace(/\[\/h3\]/gi, "</h3>");
+        bbcode = bbcode.replace(/\[h4\]/gi, "<h4>");
+        bbcode = bbcode.replace(/\[\/h4\]/gi, "</h4>");
         bbcode = bbcode.replace(/\[\/indent\]/gi, "");
         bbcode = bbcode.replace(/\[\/center\]/gi, "");
         bbcode = bbcode.replace(/\[\/right\]/gi, "");
         bbcode = bbcode.replace(/\[\/justify\]/gi, "");
+        
+        bbcode = bbcode.replace(/\[hr\]/gi, "");
+        bbcode = bbcode.replace(/\[email(.*?)\]/gi, "");
+        bbcode = bbcode.replace(/\[\/email\]/gi, "");
+        bbcode = bbcode.replace(/\[left\]/gi, "");
+        bbcode = bbcode.replace(/\[\/left\]/gi, "");
 
         bbcode = bbcode.replace(/\[ml\]\[ol\](.*?)\[\/ol\]\[\/ml\]/gmi, "<ol>$1</ol>");
         bbcode = bbcode.replace(/\[ml\]\[ul\](.*?)\[\/ul\]\[\/ml\]/gmi, "<ul>$1</ul>");
@@ -289,19 +345,65 @@ function(instance, properties, context) {
         }
     }
     
-    instance.data.initial_content = properties.initial_content;   
-    if(properties.initial_content) {
-        instance.data.initial_html = bbCodeToHTML(properties.initial_content);   
-    } 
-    
+
     $(document).ready(function(){
-        
         if(instance.data.initialized==false){
             var id, theme, toolbar, quill;
 
             //create unique ID in case more than one Rich Text input is added to a page 
             id = "richtext-editor-" + $('.ql-container').length;
             //Quill.js themes 
+            
+            let Font = Quill.import('formats/font');
+            Font.whitelist = all_fonts; //['sans-serif', 'serif', 'monospace','mirza', 'roboto'];
+            
+            
+			var icon_h1 = `
+<svg width="17px" height="12px" viewBox="0 0 17 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="h3" fill="currentColor">
+            <path d="M1.992,12.728 C1.81066576,12.9093342 1.58966797,13 1.329,13 C1.06833203,13 0.84733424,12.9093342 0.666,12.728 C0.48466576,12.5466658 0.394,12.325668 0.394,12.065 L0.394,1.525 C0.394,1.26433203 0.48466576,1.04333424 0.666,0.862 C0.84733424,0.68066576 1.06833203,0.59 1.329,0.59 C1.58966797,0.59 1.81066576,0.68066576 1.992,0.862 C2.17333424,1.04333424 2.264,1.26433203 2.264,1.525 L2.264,5.503 C2.264,5.60500051 2.31499949,5.656 2.417,5.656 L7.381,5.656 C7.48300051,5.656 7.534,5.60500051 7.534,5.503 L7.534,1.525 C7.534,1.26433203 7.62466576,1.04333424 7.806,0.862 C7.98733424,0.68066576 8.20833203,0.59 8.469,0.59 C8.72966797,0.59 8.95066576,0.68066576 9.132,0.862 C9.31333424,1.04333424 9.404,1.26433203 9.404,1.525 L9.404,12.065 C9.404,12.325668 9.31333424,12.5466658 9.132,12.728 C8.95066576,12.9093342 8.72966797,13 8.469,13 C8.20833203,13 7.98733424,12.9093342 7.806,12.728 C7.62466576,12.5466658 7.534,12.325668 7.534,12.065 L7.534,7.271 C7.534,7.16899949 7.48300051,7.118 7.381,7.118 L2.417,7.118 C2.31499949,7.118 2.264,7.16899949 2.264,7.271 L2.264,12.065 C2.264,12.325668 2.17333424,12.5466658 1.992,12.728 Z M11.42,8.63 C11.3266662,8.7033337 11.2283339,8.7133336 11.125,8.66 C11.0216661,8.6066664 10.97,8.5200006 10.97,8.4 L10.97,7.67 C10.97,7.2899981 11.1233318,6.9900011 11.43,6.77 L12.44,6.03 C12.7400015,5.8099989 13.0833314,5.7 13.47,5.7 L14.1,5.7 C14.2533341,5.7 14.3866661,5.7566661 14.5,5.87 C14.6133339,5.9833339 14.67,6.1166659 14.67,6.27 L14.67,12.43 C14.67,12.5833341 14.6133339,12.7166661 14.5,12.83 C14.3866661,12.9433339 14.2533341,13 14.1,13 L13.47,13 C13.3166659,13 13.1833339,12.9433339 13.07,12.83 C12.9566661,12.7166661 12.9,12.5833341 12.9,12.43 L12.9,7.57 L12.88,7.57 L11.42,8.63 Z" id="Shape" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>`;
+
+            var icon_h2 = `
+            <svg width="17px" height="12px" viewBox="0 0 17 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="h3" fill="currentColor">
+                        <path d="M1.992,12.728 C1.81066576,12.9093342 1.58966797,13 1.329,13 C1.06833203,13 0.84733424,12.9093342 0.666,12.728 C0.48466576,12.5466658 0.394,12.325668 0.394,12.065 L0.394,1.525 C0.394,1.26433203 0.48466576,1.04333424 0.666,0.862 C0.84733424,0.68066576 1.06833203,0.59 1.329,0.59 C1.58966797,0.59 1.81066576,0.68066576 1.992,0.862 C2.17333424,1.04333424 2.264,1.26433203 2.264,1.525 L2.264,5.503 C2.264,5.60500051 2.31499949,5.656 2.417,5.656 L7.381,5.656 C7.48300051,5.656 7.534,5.60500051 7.534,5.503 L7.534,1.525 C7.534,1.26433203 7.62466576,1.04333424 7.806,0.862 C7.98733424,0.68066576 8.20833203,0.59 8.469,0.59 C8.72966797,0.59 8.95066576,0.68066576 9.132,0.862 C9.31333424,1.04333424 9.404,1.26433203 9.404,1.525 L9.404,12.065 C9.404,12.325668 9.31333424,12.5466658 9.132,12.728 C8.95066576,12.9093342 8.72966797,13 8.469,13 C8.20833203,13 7.98733424,12.9093342 7.806,12.728 C7.62466576,12.5466658 7.534,12.325668 7.534,12.065 L7.534,7.271 C7.534,7.16899949 7.48300051,7.118 7.381,7.118 L2.417,7.118 C2.31499949,7.118 2.264,7.16899949 2.264,7.271 L2.264,12.065 C2.264,12.325668 2.17333424,12.5466658 1.992,12.728 Z M11.35,13 C11.1966659,13 11.0633339,12.9433339 10.95,12.83 C10.8366661,12.7166661 10.78,12.5833341 10.78,12.43 L10.78,12.2 C10.78,11.8266648 10.9299985,11.5233345 11.23,11.29 C12.3500056,10.4099956 13.0916649,9.7400023 13.455,9.28 C13.8183351,8.8199977 14,8.3700022 14,7.93 C14,7.3166636 13.6600034,7.01 12.98,7.01 C12.5666646,7.01 12.060003,7.1233322 11.46,7.35 C11.3333327,7.3966669 11.2133339,7.3833337 11.1,7.31 C10.9866661,7.2366663 10.93,7.133334 10.93,7 L10.93,6.58 C10.93,6.4066658 10.9799995,6.25166735 11.08,6.115 C11.1800005,5.97833265 11.3133325,5.8866669 11.48,5.84 C12.0866697,5.6799992 12.6699972,5.6 13.23,5.6 C14.0366707,5.6 14.6583312,5.79166475 15.095,6.175 C15.5316688,6.55833525 15.75,7.0899966 15.75,7.77 C15.75,8.3566696 15.5650018,8.91499735 15.195,9.445 C14.8249981,9.97500265 14.1033387,10.6933288 13.03,11.6 C13.0233333,11.6066667 13.02,11.6133333 13.02,11.62 C13.02,11.6266667 13.0233333,11.63 13.03,11.63 L15.22,11.63 C15.3733341,11.63 15.5049995,11.6866661 15.615,11.8 C15.7250006,11.9133339 15.78,12.0466659 15.78,12.2 L15.78,12.43 C15.78,12.5833341 15.7250006,12.7166661 15.615,12.83 C15.5049995,12.9433339 15.3733341,13 15.22,13 L11.35,13 Z" id="Shape" fill-rule="nonzero"></path>
+                    </g>
+                </g>
+            </svg>`;
+           
+
+            var icon_h3 = `
+            <svg width="17px" height="12px" viewBox="0 0 17 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="h3" fill="currentColor">
+                        <path d="M1.992,12.728 C1.81066576,12.9093342 1.58966797,13 1.329,13 C1.06833203,13 0.84733424,12.9093342 0.666,12.728 C0.48466576,12.5466658 0.394,12.325668 0.394,12.065 L0.394,1.525 C0.394,1.26433203 0.48466576,1.04333424 0.666,0.862 C0.84733424,0.68066576 1.06833203,0.59 1.329,0.59 C1.58966797,0.59 1.81066576,0.68066576 1.992,0.862 C2.17333424,1.04333424 2.264,1.26433203 2.264,1.525 L2.264,5.503 C2.264,5.60500051 2.31499949,5.656 2.417,5.656 L7.381,5.656 C7.48300051,5.656 7.534,5.60500051 7.534,5.503 L7.534,1.525 C7.534,1.26433203 7.62466576,1.04333424 7.806,0.862 C7.98733424,0.68066576 8.20833203,0.59 8.469,0.59 C8.72966797,0.59 8.95066576,0.68066576 9.132,0.862 C9.31333424,1.04333424 9.404,1.26433203 9.404,1.525 L9.404,12.065 C9.404,12.325668 9.31333424,12.5466658 9.132,12.728 C8.95066576,12.9093342 8.72966797,13 8.469,13 C8.20833203,13 7.98733424,12.9093342 7.806,12.728 C7.62466576,12.5466658 7.534,12.325668 7.534,12.065 L7.534,7.271 C7.534,7.16899949 7.48300051,7.118 7.381,7.118 L2.417,7.118 C2.31499949,7.118 2.264,7.16899949 2.264,7.271 L2.264,12.065 C2.264,12.325668 2.17333424,12.5466658 1.992,12.728 Z M11.32,7.07 C11.1666659,7.07 11.0333339,7.0133339 10.92,6.9 C10.8066661,6.7866661 10.75,6.6533341 10.75,6.5 L10.75,6.27 C10.75,6.1166659 10.8066661,5.9833339 10.92,5.87 C11.0333339,5.7566661 11.1666659,5.7 11.32,5.7 L15.05,5.7 C15.2033341,5.7 15.3366661,5.7566661 15.45,5.87 C15.5633339,5.9833339 15.62,6.1166659 15.62,6.27 L15.62,6.5 C15.62,6.8800019 15.4733348,7.1899988 15.18,7.43 L13.67,8.68 L13.67,8.69 C13.67,8.6966667 13.6733333,8.7 13.68,8.7 L13.8,8.7 C14.3800029,8.7 14.8449983,8.8799982 15.195,9.24 C15.5450018,9.6000018 15.72,10.0866636 15.72,10.7 C15.72,11.4733372 15.4833357,12.0666646 15.01,12.48 C14.5366643,12.8933354 13.8566711,13.1 12.97,13.1 C12.436664,13.1 11.8966694,13.0366673 11.35,12.91 C11.1899992,12.8699998 11.0583339,12.7816674 10.955,12.645 C10.8516662,12.5083327 10.8,12.3533342 10.8,12.18 L10.8,11.84 C10.8,11.706666 10.8549995,11.6016671 10.965,11.525 C11.0750006,11.448333 11.196666,11.4299998 11.33,11.47 C11.9033362,11.6566676 12.4033312,11.75 12.83,11.75 C13.2166686,11.75 13.5166656,11.6600009 13.73,11.48 C13.9433344,11.2999991 14.05,11.0500016 14.05,10.73 C14.05,10.4033317 13.9266679,10.173334 13.68,10.04 C13.4333321,9.906666 12.9733367,9.8366667 12.3,9.83 C12.1466659,9.83 12.0133339,9.77500055 11.9,9.665 C11.7866661,9.55499945 11.73,9.4233341 11.73,9.27 L11.73,9.25 C11.73,8.8766648 11.8733319,8.5666679 12.16,8.32 L13.58,7.09 L13.58,7.08 C13.58,7.0733333 13.5766667,7.07 13.57,7.07 L11.32,7.07 Z" id="Shape" fill-rule="nonzero"></path>
+                    </g>
+                </g>
+            </svg>`;
+
+            var icon_h4 = `
+            <svg width="17px" height="12px" viewBox="0 0 17 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="h3" fill="currentColor">
+                        <path d="M1.992,12.728 C1.81066576,12.9093342 1.58966797,13 1.329,13 C1.06833203,13 0.84733424,12.9093342 0.666,12.728 C0.48466576,12.5466658 0.394,12.325668 0.394,12.065 L0.394,1.525 C0.394,1.26433203 0.48466576,1.04333424 0.666,0.862 C0.84733424,0.68066576 1.06833203,0.59 1.329,0.59 C1.58966797,0.59 1.81066576,0.68066576 1.992,0.862 C2.17333424,1.04333424 2.264,1.26433203 2.264,1.525 L2.264,5.503 C2.264,5.60500051 2.31499949,5.656 2.417,5.656 L7.381,5.656 C7.48300051,5.656 7.534,5.60500051 7.534,5.503 L7.534,1.525 C7.534,1.26433203 7.62466576,1.04333424 7.806,0.862 C7.98733424,0.68066576 8.20833203,0.59 8.469,0.59 C8.72966797,0.59 8.95066576,0.68066576 9.132,0.862 C9.31333424,1.04333424 9.404,1.26433203 9.404,1.525 L9.404,12.065 C9.404,12.325668 9.31333424,12.5466658 9.132,12.728 C8.95066576,12.9093342 8.72966797,13 8.469,13 C8.20833203,13 7.98733424,12.9093342 7.806,12.728 C7.62466576,12.5466658 7.534,12.325668 7.534,12.065 L7.534,7.271 C7.534,7.16899949 7.48300051,7.118 7.381,7.118 L2.417,7.118 C2.31499949,7.118 2.264,7.16899949 2.264,7.271 L2.264,12.065 C2.264,12.325668 2.17333424,12.5466658 1.992,12.728 Z M11.62,10.25 L11.62,10.26 C11.62,10.2666667 11.6233333,10.27 11.63,10.27 L13.28,10.27 C13.3400003,10.27 13.37,10.2433336 13.37,10.19 L13.37,7.77 C13.37,7.7633333 13.3666667,7.76 13.36,7.76 C13.3466666,7.76 13.34,7.7633333 13.34,7.77 L11.62,10.25 Z M10.68,11.6 C10.5266659,11.6 10.3950005,11.5433339 10.285,11.43 C10.1749995,11.3166661 10.12,11.1833341 10.12,11.03 L10.12,10.84 C10.12,10.4666648 10.2299989,10.1233349 10.45,9.81 L13.04,6.16 C13.2600011,5.8533318 13.5566648,5.7 13.93,5.7 L14.43,5.7 C14.5833341,5.7 14.7149994,5.7566661 14.825,5.87 C14.9350006,5.9833339 14.99,6.1166659 14.99,6.27 L14.99,10.19 C14.99,10.2433336 15.0199997,10.27 15.08,10.27 L15.48,10.27 C15.6333341,10.27 15.7666661,10.3266661 15.88,10.44 C15.9933339,10.5533339 16.05,10.6866659 16.05,10.84 L16.05,11.03 C16.05,11.1833341 15.9933339,11.3166661 15.88,11.43 C15.7666661,11.5433339 15.6333341,11.6 15.48,11.6 L15.08,11.6 C15.0199997,11.6 14.99,11.6299997 14.99,11.69 L14.99,12.43 C14.99,12.5833341 14.9350006,12.7166661 14.825,12.83 C14.7149994,12.9433339 14.5833341,13 14.43,13 L13.93,13 C13.7766659,13 13.6450005,12.9433339 13.535,12.83 C13.4249995,12.7166661 13.37,12.5833341 13.37,12.43 L13.37,11.69 C13.37,11.6299997 13.3400003,11.6 13.28,11.6 L10.68,11.6 Z" id="Shape" fill-rule="nonzero"></path>
+                    </g>
+                </g>
+            </svg>`;
+
+            var icons = Quill.import('ui/icons'); icons.header[1]= icon_h1;
+            var icons = Quill.import('ui/icons'); icons.header[2]= icon_h2;
+            var icons = Quill.import('ui/icons'); icons.header[3]= icon_h3;
+            var icons = Quill.import('ui/icons'); icons.header[4]= icon_h4;
+            
+            
+            
+            Quill.register(Font, true);
+            
             if(properties.theme=="Regular"){
                 theme = "snow";
             } else {
@@ -311,8 +413,10 @@ function(instance, properties, context) {
             //Initialize toolbar based on desired complexity 
             if(properties.complexity=="Basic"){
                 toolbar = [[ 'bold', 'italic', 'link'], [{ 'align': [] },{ 'header': '1' }, { 'header': '2' }]];
+            } else if(properties.complexity=="Medium"){
+                toolbar = [[{ 'font': all_fonts }], [ 'bold', 'italic', 'underline', 'strike' ], [{ 'color': [] }, { 'background': [] }], [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' },{ 'header': '4' }], [{ 'list': 'ordered' }, { 'list': 'bullet'}], [{ 'indent': '-1' }, { 'indent': '+1' }, { 'align': [] }, 'link']];
             } else {
-                toolbar = [[{ 'font': [] }, { 'size': [] }], [ 'bold', 'italic', 'underline', 'strike' ], [{ 'color': [] }, { 'background': [] }], [{ 'script': 'super' }, { 'script': 'sub' }], [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block' ], [{ 'list': 'ordered' }, { 'list': 'bullet'}], [{ 'indent': '-1' }, { 'indent': '+1' }, { 'align': [] }], [ 'link', 'image', 'video'], [ 'clean' ]];
+                toolbar = [[{ 'font': all_fonts }, { 'size': [] }], [ 'bold', 'italic', 'underline', 'strike' ], [{ 'color': [] }, { 'background': [] }], [{ 'script': 'super' }, { 'script': 'sub' }], [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' },{ 'header': '4' }, 'blockquote', 'code-block' ], [{ 'list': 'ordered' }, { 'list': 'bullet'}], [{ 'indent': '-1' }, { 'indent': '+1' }, { 'align': [] }], [ 'link', 'image', 'video'], [ 'clean' ]];
             }
 
             //add Quill container div to page 
@@ -331,18 +435,28 @@ function(instance, properties, context) {
                 placeholder: properties.placeholder
             });
 			$('#'+id).css('border','none');
+            
             if(properties.bubble.border_style != "none" && theme == "snow"){
             	$('#'+id).siblings('.ql-toolbar').css('border', 'none');
                 $('#'+id).siblings('.ql-toolbar').css('border-bottom', '1px solid #ccc');   
             }
+
             //adjust height of the Quill editor if a toolbar exists so that it doesn't overflow from the Bubble element 
             instance.data.toolbar_height = 0;
             if(properties.theme=="Regular"){
                 var toolbar_height = Number($('#'+id).siblings('.ql-toolbar').css('height').replace(/px/gmi, "")) - 10;
                 instance.data.toolbar_height = toolbar_height;
                 var bubble_height = properties.bubble.height;
+                if(properties.overflow==false){
+                    bubble_height = bubble_height - 15;
+                }
                 $(quill.root).parent().css('height', (bubble_height - toolbar_height) + "px");
+            } else {
+                $('.ql-header').each(function(){
+                    $(this).addClass('tooltip-header-icon');
+                });
             }
+            
             //add tooltips to icons for clarity
             $('.ql-bold').attr('title', 'Bold');
             $('.ql-italic').attr('title', 'Italic');
@@ -350,25 +464,43 @@ function(instance, properties, context) {
             $('.ql-header[value="1"]').attr('title', "Title");
             $('.ql-header[value="2"]').attr('title', "Subtitle");
             $('.ql-align').attr('title', 'Text alignment');
-            if(properties.complexity=='Full'){
+            if(properties.complexity=="Medium"||properties.complexity=='Full'){
+            	$('.ql-header[value="3"]').attr('title', "Subtitle");
+                $('.ql-header[value="4"]').attr('title', "Subtitle");
                 $('.ql-strike').attr('title', 'Strikethrough');
                 $('.ql-color').attr('title', 'Font color');
                 $('.ql-background').attr('title', 'Highlight color');
                 $('.ql-font').attr('title', 'Font');
-                $('.ql-size').attr('title', 'Font size');
-                $('.ql-script[value="super"]').attr('title', "Superscript");
-                $('.ql-script[value="sub"]').attr('title', "Subscript");
-                $('.ql-blockquote').attr('title', 'Quote');
-                $('.ql-code-block').attr('title', 'Code');
                 $('.ql-list[value="ordered"]').attr('title', "Numbered list");
                 $('.ql-list[value="bullet"]').attr('title', "Bulleted list");
                 $('.ql-indent[value="+1"]').attr('title', "Indent");
                 $('.ql-indent[value="-1"]').attr('title', "Remove indent");
                 $('.ql-link').attr('title', 'Link');
+            }
+            if(properties.complexity=='Full'){
+                $('.ql-size').attr('title', 'Font size');
+                $('.ql-script[value="super"]').attr('title', "Superscript");
+                $('.ql-script[value="sub"]').attr('title', "Subscript");
+                $('.ql-blockquote').attr('title', 'Quote');
+                $('.ql-code-block').attr('title', 'Code');
                 $('.ql-image').attr('title', 'Image');
                 $('.ql-video').attr('title', 'Video');
                 $('.ql-clean').attr('title', 'Remove all formatting');
             }
+            
+            $('.ql-font .ql-picker-options').css('height','250px');
+            $('.ql-font .ql-picker-options').css('overflow','scroll');
+            //correctly format font dropdown w/ custom font styles 
+            $('.ql-font .ql-picker-options .ql-picker-item').each(function(idx){
+            	var font_type = $(this).data('value');
+                var font_spaces = font_type.split('-');
+                for(var i=0; i < font_spaces.length; i+=1){
+                   	font_spaces[i] = font_spaces[i].charAt(0).toUpperCase() + font_spaces[i].slice(1);
+                }
+                font_type = font_spaces.join(' ');
+                $(this).attr('data-label', font_type);
+            });
+            
             //initialize helpful variables for later on: 
             instance.data.quill = quill;
             instance.data.id = id;
@@ -383,19 +515,50 @@ function(instance, properties, context) {
             //sets placeholder for link input to https://bubble.io/
             var tooltip = quill.theme.tooltip;
             var input = tooltip.root.querySelector("input[data-link]");
-            input.dataset.link = "https://bubble.io/";
+            input.dataset.link = properties.link_placeholder;
             instance.data.initialized = true;
+            
+            if(instance.data.should_focus){
+                quill.focus();
+            }
         }
 
         //disable Quill input if this element is disabled 
         if(properties.disabled){
-            quill.enable(false);
+            instance.data.quill.enable(false);
+        } else {
+            instance.data.quill.enable(true);
+        }	
+       
+        var content_change_handler = function(bbcode){
+            instance.data.should_rerun_val = false;
+            
+            instance.publishAutobinding(bbcode);
+            instance.publishState("value", bbcode);
+            
+            if(instance.data.change_event_should_trigger == false) {
+            	instance.data.change_event_should_trigger = true;  
+            } else {
+            	instance.triggerEvent('value_changes', function(err){
+                    context.reportToDebugger("Rich text event error - please report to admin");
+                });  
+            }
+
+            //checks if input is valid -> will not be valid if the input is empty and the user has checked "this input should not be empty" 
+            if(properties.empty==true && checkForContent(quill.root.innerHTML)==""){
+                instance.publishState("value_is_valid", false);
+            } else {
+                instance.publishState("value_is_valid", true);
+            }
         }
              
         //loads initial content if initial content property is set - handles height change if expected behavior is for element to extend if there is overflow 
         if (instance.data.initial_content_loaded == false){
+            var quill = instance.data.quill;
+            var id = instance.data.id;
             if(properties.initial_content){
                 var initial_html = bbCodeToHTML(properties.initial_content);
+                $(quill.root).html("");
                 quill.clipboard.dangerouslyPasteHTML(0, initial_html);
                 if(properties.overflow && !properties.initial_content.includes('[/img]')){
                     instance.setHeight(calculateHeight(quill,instance.data.initial_height, instance.data.toolbar_height));   
@@ -405,32 +568,16 @@ function(instance, properties, context) {
                         instance.setHeight(calculateHeight(quill,instance.data.initial_height, instance.data.toolbar_height));   
                     }
                 });
+            } else {
+            	$(quill.root).html("");   
             }
-            //prevents initial content from loading more than once 
+            //handle state and autobinding for initial content 
+            content_change_handler(properties.initial_content);
+            //prevents the same initial content from loading more than once 
             instance.data.initial_content_loaded = true;
-            //instance.publishState("value", properties.initial_content);
-            
-            //bind on/off focus events 
-            document.getElementById(id).firstChild.onfocus = () => {
-                instance.publishState("field_is_focused", true);
-            }
-            document.getElementById(id).firstChild.onblur = () => {
-                instance.publishState("field_is_focused", false);
-                //publishes value for autobinding on blur 
-                instance.publishAutobinding(htmlToBBCode(quill.root.innerHTML));
-                var html_to_bbcode = htmlToBBCode(quill.root.innerHTML);
-                //set Rich Text Editor value to bbcode representation of Quill html 
-                instance.publishState("value", html_to_bbcode);
-                //checks if input is valid -> will not be valid if the input is empty and the user has checked "this input should not be empty" 
-                if(properties.empty==true && checkForContent(quill.root.innerHTML)==""){
-                    instance.publishState("value_is_valid", false);
-                } else {
-                    instance.publishState("value_is_valid", true);
-                }
-            }
+            //initialize flag to see if html should actually be translated to bbcode later on 
+            instance.data.should_rerun_val = false;
         }  
-    
-        var quill = instance.data.quill;
         
         //hides image resize module outline if any formatting buttons are pressed 
         $('.ql-formats').on('click', function(){
@@ -438,30 +585,56 @@ function(instance, properties, context) {
                 $('#'+instance.data.id).children().eq(3).hide();
             }
         });
+        
+        var quill = instance.data.quill;
+        
+        //handles text changes and blur events 
+        var set_val = function(){
+            $.when(htmlToBBCode(quill.root.innerHTML)).done(function(html_to_bbcode) {
+                content_change_handler(html_to_bbcode);
+            });
+        }
 
         //timer for saving value state once user stops typing 
         //useful so that htmlToBBCode doesn't have to run every single time a letter is typed - also runs on blur 
         var typingTimer;
-        var doneTypingInterval = 2000;
+        var doneTypingInterval = 2200;
         var doneTyping = function(){
-            var html_to_bbcode = htmlToBBCode(quill.root.innerHTML);
-            //set Rich Text Editor value to bbcode representation of Quill html 
-            instance.publishState("value", html_to_bbcode);
-            instance.triggerEvent('value_changes', function(err){
-                context.reportToDebugger("Rich text event error - please report to admin");
-            });
-            //checks if input is valid -> will not be valid if the input is empty and the user has checked "this input should not be empty" 
-                if(properties.empty==true && checkForContent(quill.root.innerHTML)==""){
-                instance.publishState("value_is_valid", false);
-            } else {
-                instance.publishState("value_is_valid", true);
+            if(instance.data.should_rerun_val && properties.autosave == true){
+            	set_val();  
+            }
+            
+        }
+        
+        //bind on/off focus events 
+        document.getElementById(instance.data.id).firstChild.onfocus = () => {
+            instance.publishState("field_is_focused", true);
+        }
+        document.getElementById(instance.data.id).firstChild.onblur = () => {
+            instance.publishState("field_is_focused", false);
+            clearTimeout(typingTimer);
+            if(instance.data.should_rerun_val){
+            	set_val();  
             }
         }
         
+        $('.ql-toolbar').mousedown(function(e){
+            e.preventDefault();
+        });
+        
+        
+        
         //actions to be run whenever the Quill text is changed  
         quill.on('text-change', function(delta, oldDelta, source) { 
+            instance.data.should_rerun_val = true;
             clearTimeout(typingTimer);
             typingTimer = setTimeout(doneTyping, doneTypingInterval);
+            
+            $(quill.root).find('img').load(function(){
+                if (properties.overflow){
+                    instance.setHeight(calculateHeight(quill, instance.data.initial_height, instance.data.toolbar_height));   
+                }
+            });
 
             var rawhtml = quill.root.innerHTML;
             $(quill.root).find('img').each(function(x){
@@ -481,26 +654,28 @@ function(instance, properties, context) {
 
             //handles images -> base64 images cannot be loaded in our text elements, so this functionality identifies base64 files and uploads them to our S3 bucket and replaces the src value with the S3 url 
             for(var i=0; i<matches.length; i+=1){
-                if(matches[i].includes("data:image/jpeg;base64")&&img_change){
-                    matches[i] = matches[i].replace(/<img(.*?)src="(.*?)"(.*?)>/gi, "$2");
-                    var base64 = matches[i].split(",").pop();
-                    matches[i] = 'upload complete';
+                var image_match = matches[i];
+                matches[i] = 'completed';
+                if(image_match.includes("data:image/jpeg;base64")&&img_change){
+                    image_match = image_match.replace(/<img(.*?)src="(.*?)"(.*?)>/gi, "$2");
+                    var base64 = image_match.split(",").pop();
+                    //matches[i] = 'upload complete';
                     context.uploadContent("richtext_content.jpeg", base64, function(err, url) {
                         $(quill.root).find('img[src="data:image/jpeg;base64,'+ base64 +'"]').attr('src', url);
                     });
                 }
-                if(matches[i].includes("data:image/jpg;base64")){
-                    matches[i] = matches[i].replace(/<img(.*?)src="(.*?)"(.*?)>/gi, "$2");
-                    var base64 = matches[i].split(",").pop();
-                    matches[i] = 'upload complete';
+                if(image_match.includes("data:image/jpg;base64")){
+                    image_match = image_match.replace(/<img(.*?)src="(.*?)"(.*?)>/gi, "$2");
+                    var base64 = image_match.split(",").pop();
+                   // matches[i] = 'upload complete';
                     context.uploadContent("richtext_content.jpg", base64, function(err, url) {
                         $(quill.root).find('img[src="data:image/jpg;base64,'+ base64 +'"]').attr('src', url);
                     });
                 }
-                if(matches[i].includes("data:image/png;base64")){
-                    matches[i] = matches[i].replace(/<img(.*?)src="(.*?)"(.*?)>/gi, "$2");
-                    var base64 = matches[i].split(",").pop();
-                    matches[i] = 'upload complete';
+                if(image_match.includes("data:image/png;base64")){
+                    image_match = image_match.replace(/<img(.*?)src="(.*?)"(.*?)>/gi, "$2");
+                    var base64 = image_match.split(",").pop();
+                    //matches[i] = 'upload complete';
                     context.uploadContent("richtext_content.png", base64, function(err, url) {
                         $(quill.root).find('img[src="data:image/png;base64,'+ base64 +'"]').attr('src', url);
                     });

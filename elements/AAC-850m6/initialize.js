@@ -5,5 +5,10 @@ function(instance, context) {
     instance.data.id = "";
     instance.canvas.css("overflow", "visible");
     instance.data.img_tracker = 0;
-
+    instance.data.prev_initial_content = '';
+    instance.data.initial_content_loaded = false;
+    instance.publishState("field_is_focused", false);
+    instance.data.change_event_should_trigger = false;
+    instance.data.should_rerun_val = false;
+    
 }

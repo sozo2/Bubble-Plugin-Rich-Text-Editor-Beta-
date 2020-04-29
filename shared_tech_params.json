@@ -51,6 +51,22 @@
         "ABD": {
             "name": "indent + align",
             "url": "//dd7tel2830j4w.cloudfront.net/f1580145152691x503666194763457100/indent_align.png"
+        },
+        "ABE": {
+            "name": "font styles",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1585640996566x197128756908218080/rte-fonts.css"
+        },
+        "ABF": {
+            "name": "all titles",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1585641019238x597655811909080000/all%20titles.png"
+        },
+        "ABG": {
+            "name": "medium formats",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1585641062978x592964815466108240/medium%20formats.png"
+        },
+        "ABH": {
+            "name": "code + quotes",
+            "url": "//dd7tel2830j4w.cloudfront.net/f1585641079062x980676637005123800/code%20quotes.png"
         }
     },
     "dependencies": {

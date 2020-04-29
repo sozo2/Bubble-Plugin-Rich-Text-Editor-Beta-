@@ -15,23 +15,34 @@ function(instance, properties) {
         "media": "//dd7tel2830j4w.cloudfront.net/f1578328690820x732983396842500400/media.png",
         "remove_style": "//dd7tel2830j4w.cloudfront.net/f1578328704608x655581645962726700/remove_style.png",
         "list": "//dd7tel2830j4w.cloudfront.net/f1580145133799x948312827511517800/list.png",
-        "indent_align": "//dd7tel2830j4w.cloudfront.net/f1580145152691x503666194763457100/indent_align.png"
+        "indent_align": "//dd7tel2830j4w.cloudfront.net/f1580145152691x503666194763457100/indent_align.png",
+        "all_titles": "//dd7tel2830j4w.cloudfront.net/f1585641019238x597655811909080000/all%20titles.png",
+        "code_quotes": "//dd7tel2830j4w.cloudfront.net/f1585641079062x980676637005123800/code%20quotes.png",
+        "medium_format": "//dd7tel2830j4w.cloudfront.net/f1585641062978x592964815466108240/medium%20formats.png"
     };
     
     
     if(properties.theme == "Regular"){
-        var toolbar = "<div><div>";
+        var toolbar = "<div><div style='background-color:white;'>";
         if(properties.complexity == "Full"){
             toolbar += "<img src='"+ preview_images["font"] +"'>";
             toolbar += "<img src='"+ preview_images["size"] +"'>";
             toolbar += "<img src='"+ preview_images["text_styles"] +"'>";
             toolbar += "<img src='"+ preview_images["text_color"] +"'>";
             toolbar += "<img src='"+ preview_images["sup_sub"] +"'>";
-            toolbar += "<img src='"+ preview_images["titles_quote_code"] +"'>";
+            toolbar += "<img src='"+ preview_images["all_titles"] +"'>";
+            toolbar += "<img src='"+ preview_images["code_quotes"] +"'>";
             toolbar += "<img src='"+ preview_images["list"] +"'>";
             toolbar += "<img src='"+ preview_images["indent_align"] +"'>";
             toolbar += "<img src='"+ preview_images["media"] +"'>";
             toolbar += "<img src='"+ preview_images["remove_style"] +"'>";
+        } else if(properties.complexity == "Medium"){
+            toolbar += "<img src='"+ preview_images["font"] +"'>";
+            toolbar += "<img src='"+ preview_images["text_styles"] +"'>";
+            toolbar += "<img src='"+ preview_images["text_color"] +"'>";
+            toolbar += "<img src='"+ preview_images["all_titles"] +"'>";
+            toolbar += "<img src='"+ preview_images["list"] +"'>";
+            toolbar += "<img src='"+ preview_images["medium_format"] +"'>";
         } else {
             toolbar += "<img src='"+ preview_images["basic_styles"] +"'>";
             toolbar += "<img src='"+ preview_images["basic_text_alignment"] +"'>";

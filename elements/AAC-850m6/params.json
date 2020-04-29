@@ -1,5 +1,5 @@
 {
-    "add_hover_pressed": false,
+    "add_hover_pressed": true,
     "add_is_visible": true,
     "autobinding_value": "text",
     "category": "input forms",
@@ -17,6 +17,7 @@
     "fields": {
         "AAD": {
             "caption": "Initial Content",
+            "doc": "",
             "editor": "DynamicValue",
             "long_text": true,
             "name": "initial_content",
@@ -27,33 +28,36 @@
         "AAZ": {
             "caption": "Regular or Tooltip?",
             "default_val": "Regular",
+            "doc": "",
             "editor": "Dropdown",
             "in_style": true,
             "name": "theme",
             "options": "Regular,Tooltip",
-            "rank": 2
+            "rank": 3
         },
         "AAa": {
             "caption": "Style Complexity",
             "default_val": "Full",
-            "doc": "Select more or less style options depending on need",
+            "doc": "",
             "editor": "Dropdown",
             "in_style": true,
             "name": "complexity",
-            "options": "Basic,Full",
-            "rank": 3
+            "options": "Basic,Medium,Full",
+            "rank": 4
         },
         "AAb": {
             "caption": "Extend to fit",
             "default_val": false,
+            "doc": "",
             "editor": "Checkbox",
             "in_style": true,
             "name": "overflow",
             "options": "Scroll,Extend to fit",
-            "rank": 4
+            "rank": 5
         },
         "AAc": {
             "caption": "Placeholder",
+            "doc": "",
             "editor": "DynamicValue",
             "name": "placeholder",
             "optional": true,
@@ -65,17 +69,34 @@
             "default_val": false,
             "editor": "Checkbox",
             "name": "empty",
-            "rank": 5
+            "rank": 7
         },
         "AAe": {
             "caption": "This input is disabled ",
             "default_val": false,
             "editor": "Checkbox",
             "name": "disabled",
+            "rank": 8
+        },
+        "ABI": {
+            "caption": "Link  input placeholder",
+            "default_val": "https://bubble.io/",
+            "editor": "DynamicValue",
+            "name": "link_placeholder",
+            "optional": true,
+            "rank": 2,
+            "value": "text"
+        },
+        "ABJ": {
+            "caption": "Enable autosave",
+            "default_val": false,
+            "doc": "Enabling autosave updates the editor's value state every few seconds. Otherwise, the value will update when you click out of the editor.",
+            "editor": "Checkbox",
+            "name": "autosave",
             "rank": 6
         }
     },
-    "has_reset_fn": false,
+    "has_reset_fn": true,
     "icon": "ion-android-list",
     "property_applications": {
         "Background": true,
