@@ -1,4 +1,5 @@
 function(instance, properties) {
+
     //custom preview that changes as various properties are changed
     //uses images rather than initializing a disabled Quill instance because the images are lighter weight and makes loading the element more efficient in the editor 
     

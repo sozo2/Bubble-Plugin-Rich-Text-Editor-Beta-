@@ -1,18 +1,22 @@
 function(instance, properties, context) {
-    
+            
     var all_fonts = ['sans-serif', 'abeezee', 'abril-fatface', 'alegreya', 'archivo', 'arial', 'arvo', 'biorhyme', 'b612', 'cairo', 'cardo', 'concert-one', 'cormorant', 'cousine', 'crimson-text', 'droid-sans', 'droid-serif', 'eb-garamond', 'exo-2', 'fira-sans', 'fjalla-one', 'frank-ruhl-libre', 'karla', 'ibm-plex', 'lato', 'lora', 'merriweather', 'mizra', 'monospace', 'montserrat', 'muli', 'noto-sans', 'nunito', 'old-standard-tt', 'open-sans', 'oswald', 'oxygen', 'playfair-display', 'pt-sans', 'pt-serif', 'poppins', 'rakkas', 'raleway', 'roboto', 'rubik', 'serif', 'source-sans', 'source-sans-pro', 'spectral', 'times-new-roman', 'tinos', 'titillium', 'ubuntu','varela','volkorn','work-sans','yatra-one'];
     
     if(instance.data.initialized == false){
         instance.data.prev_initial_content = properties.initial_content;
     } 
     
+
+    if(properties.bubble.auto_binding == true){
+        if(properties.initial_content != null){
+            console.warn("Ignoring initial content since autobinding is enabled.");
+        }
+        properties.initial_content = properties.autobinding;
+    }
+    
     if(properties.initial_content != instance.data.prev_initial_content){
         instance.data.prev_initial_content = properties.initial_content;
         instance.data.initial_content_loaded = false;
-    }
-    
-    if(properties.initial_content == null && properties.bubble.auto_binding == true){
-        properties.initial_content = properties.autobinding;
     }
     //function to check if the input is truly empty - runs under the assumption that an input should be considered empty if it contains a blank html tag but no text is actually written 
     var checkForContent = function(html){
@@ -540,7 +544,9 @@ function(instance, properties, context) {
             	instance.data.change_event_should_trigger = true;  
             } else {
             	instance.triggerEvent('value_changes', function(err){
-                    context.reportToDebugger("Rich text event error - please report to admin");
+                    if(err){
+                    	console.error("Rich text event error - please report to admin: " + JSON.stringify(err));  
+                    }
                 });  
             }
 

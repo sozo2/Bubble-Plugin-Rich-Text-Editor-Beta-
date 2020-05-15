@@ -17,7 +17,7 @@
     "fields": {
         "AAD": {
             "caption": "Initial Content",
-            "doc": "",
+            "doc": "The initial content will be ignored if auto-binding is enabled.",
             "editor": "DynamicValue",
             "long_text": true,
             "name": "initial_content",
@@ -89,8 +89,8 @@
         },
         "ABJ": {
             "caption": "Enable autosave",
-            "default_val": false,
-            "doc": "Enabling autosave updates the editor's value state every few seconds. Otherwise, the value will update when you click out of the editor.",
+            "default_val": true,
+            "doc": "Enabling autosave updates the editor's value state every few seconds. Otherwise, the value will update when you click out of the element.",
             "editor": "Checkbox",
             "name": "autosave",
             "rank": 6
