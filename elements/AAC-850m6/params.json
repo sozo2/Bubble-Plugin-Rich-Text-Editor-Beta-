@@ -111,7 +111,7 @@
         "AAE": {
             "caption": "value",
             "initialization_code": {
-                "fn": "function(properties, context) {\n\n\tif(properties.initial_content){\n        return properties.initial_content;\n    } else {\n        return \"\";\n    }\n    \n}"
+                "fn": "function(properties, context) {\n\n\treturn properties.initial_content || ''; \n    \n}"
             },
             "name": "value",
             "value": "text"
@@ -119,7 +119,7 @@
         "AAg": {
             "caption": "value is valid",
             "initialization_code": {
-                "fn": "function(properties, context) {\n\n\tif(properties.empty==true && properties.initial_content==null){\n        return false;\n    } else {\n        return true; \n    }\n\n}"
+                "fn": "function(properties, context) {\n\n\treturn properties.empty === true && !properties.initial_content;\n\n}"
             },
             "name": "value_is_valid",
             "value": "boolean"

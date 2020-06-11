@@ -8,6 +8,6 @@
     "description": "Enable your users to write rich, formatted text in an input. Compatible with text elements and email. ",
     "image": "//s3.amazonaws.com/appforest_uf/f1580239103921x980427343965933400/Rich%20text%20editor%20plugin%20icon.png",
     "license": "open_source",
-    "name": "Rich Text Editor (Beta)",
+    "name": "Rich Text Editor",
     "plugin_instructions": "To resize an image, click on it and drag the corners. "
 }
