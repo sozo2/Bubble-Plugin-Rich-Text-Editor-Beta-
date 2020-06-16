@@ -460,10 +460,9 @@ var update = function(instance, properties, context) {
           bubble_height = bubble_height - 15;
         }
         $(quill.root).parent().css('height', (bubble_height - toolbar_height) + "px");
+        $('.ql-header').addClass('regular-header-icon');
       } else {
-        $('.ql-header').each((index, element) => {
-          $(element).addClass('tooltip-header-icon');
-        });
+        $('.ql-header').addClass('tooltip-header-icon');
       }
 
       //add tooltips to icons for clarity
