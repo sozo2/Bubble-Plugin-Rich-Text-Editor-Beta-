@@ -10,5 +10,7 @@ function(instance, context) {
     instance.publishState("field_is_focused", false);
     instance.data.change_event_should_trigger = false;
     instance.data.should_rerun_val = false;
+    instance.data.initial_content = "";
+    instance.data.initial_html = "";
     
 }

@@ -6,7 +6,6 @@ var update = function(instance, properties, context) {
     instance.data.prev_initial_content = properties.initial_content;
   }
 
-
   if(properties.bubble.auto_binding === true){
     if (properties.initial_content) {
       console.warn("Ignoring initial content since autobinding is enabled.");
@@ -91,7 +90,7 @@ var update = function(instance, properties, context) {
       result += "[/" + list_type + "][/ml]";
       return result;
     });
-              
+
     html = html.replace(/<img[^>]* src="(.*?)" style="cursor: nwse-resize;" width="(.*?)">/gi, "[img width=$2]$1[/img]");
     html = html.replace(/<img[^>]* src="(.*?)" style="" width="(.*?)">/gi, "[img width=$2]$1[/img]");
     html = html.replace(/<img[^>]* src="(.*?)" width="(.*?)">/gi, "[img width=$2]$1[/img]");
@@ -104,7 +103,13 @@ var update = function(instance, properties, context) {
       }
       return "[url="+src+"]"+url_text+"[/url]";
     });
+
+    // Youtube video handling
     html = html.replace(/<iframe(.*?)src="https:\/\/www.youtube.com\/embed\/(.*?)\?showinfo=0"(.*?)><\/iframe>/gi, "[youtube]$2[/youtube]");
+
+    // Standard video handling
+    html = html.replace(/<iframe class="ql-video"[^>]*?src="([^"]*?)"[^>]*?><\/iframe>/gi, "[video]$1[/video]");
+
     html = html.replace(/<pre [^>]*>/gmi, "[code]");
 
     html = html.replace(/<(.*?) class="(.*?)"(.*?)>/gmi, "<$1$3>");
@@ -142,11 +147,11 @@ var update = function(instance, properties, context) {
     html = html.replace(/<\/span>/gi, "");
     html = html.replace(/<\/p>/gi, "\n");
 
+    // why?
     html = html.replace(/http:\/\//gi, "http://");
     html = html.replace(/https:\/\//gi, "https://");
 
     html = html.replace(/\[\/center\]\[center\]<br>\n/gmi, "[/center]<buffer>[center]<br>\n");
-    html = html.replace(/\[\/center\]\[center\]/gmi, "");
     html = html.replace(/\[\/right\]\[right\]<br>\n/gmi, "[/right]<buffer>[right]<br>\n");
     html = html.replace(/\[\/right\]\[right\]/gmi, "");
     html = html.replace(/\[\/justify\]\[justify\]<br>\n/gmi, "[/justify]<buffer>[justify]<br>\n");
@@ -164,21 +169,21 @@ var update = function(instance, properties, context) {
 
   //"translates" bbcode to Quill html - useful when using dynamic values to set initial input
   var bbCodeToHTML = function(bbcode) {
-    bbcode = bbcode.replace(/\n/gi, "<br>");
-    bbcode = bbcode.replace(/\[\/center\]/gi, "[/center]<br>");
-    bbcode = bbcode.replace(/\[\/right\]/gi, "[/right]<br>");
-    bbcode = bbcode.replace(/\[\/justify\]/gi, "[/justify]<br>");
+    bbcode = bbcode.replace(/\[\/center\]/gi, "[/center]");
+    bbcode = bbcode.replace(/\[\/right\]/gi, "[/right]");
+    bbcode = bbcode.replace(/\[\/justify\]/gi, "[/justify]");
 
+  // TODO: for all lines containing (.*?), use '/gmis' instead of '/gmi'
     bbcode = bbcode.replace(/\[center\](.*?)\[\/center\]/gmi, function(x){
       x = x.replace(/\[center\](.*?)\[\/center\]/gmi, "$1");
       x = x.replace(/\[h1\]/gmi, "[center][h1]");
-      x = x.replace(/\[\/h1\]/gmi, "[/h1][/center]");
+      x = x.replace(/\[\/h1\]\n/gmi, "[/h1][/center]");
       x = x.replace(/\[h2\]/gmi, "[center][h2]");
-      x = x.replace(/\[\/h2\]/gmi, "[/h2][/center]");
+      x = x.replace(/\[\/h2\]\n/gmi, "[/h2][/center]");
       x = x.replace(/\[h3\]/gmi, "[center][h3]");
-      x = x.replace(/\[\/h3\]/gmi, "[/h3][/center]");
+      x = x.replace(/\[\/h3\]\n/gmi, "[/h3][/center]");
       x = x.replace(/\[h4\]/gmi, "[center][h4]");
-      x = x.replace(/\[\/h4\]/gmi, "[/h4][/center]");
+      x = x.replace(/\[\/h4\]\n/gmi, "[/h4][/center]");
       x = x.replace(/\[quote\]/gmi, "[center][quote]");
       x = x.replace(/\[\/quote\]/gmi, "[/quote][/center]");
       x = x.replace(/\[youtube\]/gmi, "[center][youtube]");
@@ -192,13 +197,13 @@ var update = function(instance, properties, context) {
     bbcode = bbcode.replace(/\[right\](.*?)\[\/right\]/gmi, function(x){
       x = x.replace(/\[right\](.*?)\[\/right\]/gmi, "$1");
       x = x.replace(/\[h1\]/gmi, "[right][h1]");
-      x = x.replace(/\[\/h1\]/gmi, "[/h1][/right]");
+      x = x.replace(/\[\/h1\]\n/gmi, "[/h1][/right]");
       x = x.replace(/\[h2\]/gmi, "[right][h2]");
-      x = x.replace(/\[\/h2\]/gmi, "[/h2][/right]");
+      x = x.replace(/\[\/h2\]\n/gmi, "[/h2][/right]");
       x = x.replace(/\[h3\]/gmi, "[right][h3]");
-      x = x.replace(/\[\/h3\]/gmi, "[/h3][/right]");
+      x = x.replace(/\[\/h3\]\n/gmi, "[/h3][/right]");
       x = x.replace(/\[h4\]/gmi, "[right][h4]");
-      x = x.replace(/\[\/h4\]/gmi, "[/h4][/right]");
+      x = x.replace(/\[\/h4\]\n/gmi, "[/h4][/right]");
       x = x.replace(/\[quote\]/gmi, "[right][quote]");
       x = x.replace(/\[\/quote\]/gmi, "[/quote][/right]");
       x = x.replace(/\[youtube\]/gmi, "[right][youtube]");
@@ -212,13 +217,13 @@ var update = function(instance, properties, context) {
     bbcode = bbcode.replace(/\[justify\](.*?)\[\/justify\]/gmi, function(x){
       x = x.replace(/\[justify\](.*?)\[\/justify\]/gmi, "$1");
       x = x.replace(/\[h1\]/gmi, "[justify][h1]");
-      x = x.replace(/\[\/h1\]/gmi, "[/h1][/justify]");
+      x = x.replace(/\[\/h1\]\n/gmi, "[/h1][/justify]");
       x = x.replace(/\[h2\]/gmi, "[justify][h2]");
-      x = x.replace(/\[\/h2\]/gmi, "[/h2][/justify]");
+      x = x.replace(/\[\/h2\]\n/gmi, "[/h2][/justify]");
       x = x.replace(/\[h3\]/gmi, "[justify][h3]");
-      x = x.replace(/\[\/h3\]/gmi, "[/h3][/justify]");
+      x = x.replace(/\[\/h3\]\n/gmi, "[/h3][/justify]");
       x = x.replace(/\[h4\]/gmi, "[justify][h4]");
-      x = x.replace(/\[\/h4\]/gmi, "[/h4][/justify]");
+      x = x.replace(/\[\/h4\]\n/gmi, "[/h4][/justify]");
       x = x.replace(/\[quote\]/gmi, "[justify][quote]");
       x = x.replace(/\[\/quote\]/gmi, "[/quote][/justify]");
       x = x.replace(/\[youtube\]/gmi, "[justify][youtube]");
@@ -248,7 +253,7 @@ var update = function(instance, properties, context) {
     bbcode = bbcode.replace(/\[(center|right|justify)\]\[blockquote\]\[indent data=(.*?)\]/gmi, '<blockquote class="ql-align-$1 ql-indent-$2">');
 
     bbcode = bbcode.replace(/\[(center|right|justify)\]\[h1\]/gmi, '<h1 class="ql-align-$1">');
-    bbcode = bbcode.replace(/\[(center|right|justify)\]\[h2\]/gmi, '<h1 class="ql-align-$1">');
+    bbcode = bbcode.replace(/\[(center|right|justify)\]\[h2\]/gmi, '<h2 class="ql-align-$1">');
     bbcode = bbcode.replace(/\[(center|right|justify)\]\[h3\]/gmi, '<h3 class="ql-align-$1">');
     bbcode = bbcode.replace(/\[(center|right|justify)\]\[h4\]/gmi, '<h4 class="ql-align-$1">');
     bbcode = bbcode.replace(/\[(center|right|justify)\]\[blockquote\]/gmi, '<blockquote class="ql-align-$1">');
@@ -262,7 +267,7 @@ var update = function(instance, properties, context) {
     bbcode = bbcode.replace(/\[blockquote\]\[indent data=(.*?)\]/gmi, '<blockquote class="ql-indent-$1">');
 
     bbcode = bbcode.replace(/\[(center|right|justify)\]\[indent data=(.*?)\](.*?)\[\/indent\]\[\/(center|right|justify)\]/gmi, '<p class="ql-align-$1 ql-indent-$2">$3</p>');
-    bbcode = bbcode.replace(/\[(center|right|justify)\](.*?)\[\/(center|right|justify)\]/gmi, '<p class="ql-align-$1">$2</p>');
+    bbcode = bbcode.replace(/\[(center|right|justify)\](.*?)\[\/\1\]/gmis, '<p class="ql-align-$1">$2</p>');
     bbcode = bbcode.replace(/\[indent data=(.*?)\](.*?)\[\/indent\]/gmi, '<p class="ql-indent-$1">$2</p>');
 
     bbcode = bbcode.replace(/\[b\]/gi, "<strong>");
@@ -282,13 +287,14 @@ var update = function(instance, properties, context) {
     bbcode = bbcode.replace(/\[sup\]/gi, "<sup>");
     bbcode = bbcode.replace(/\[\/sup\]/gi, "</sup>");
     bbcode = bbcode.replace(/\[h1\]/gi, "<h1>");
-    bbcode = bbcode.replace(/\[\/h1\]/gi, "</h1>");
+    // html to bbcode enters '\n' at the end of closing h1 tags, detect the newline along with the tag to avoid duplicate spaces
+    bbcode = bbcode.replace(/\[\/h1]\n?/gi, "</h1>");
     bbcode = bbcode.replace(/\[h2\]/gi, "<h2>");
-    bbcode = bbcode.replace(/\[\/h2\]/gi, "</h2>");
+    bbcode = bbcode.replace(/\[\/h2\]\n?/gi, "</h2>");
     bbcode = bbcode.replace(/\[h3\]/gi, "<h3>");
-    bbcode = bbcode.replace(/\[\/h3\]/gi, "</h3>");
+    bbcode = bbcode.replace(/\[\/h3\]\n?/gi, "</h3>");
     bbcode = bbcode.replace(/\[h4\]/gi, "<h4>");
-    bbcode = bbcode.replace(/\[\/h4\]/gi, "</h4>");
+    bbcode = bbcode.replace(/\[\/h4\]\n?/gi, "</h4>");
     bbcode = bbcode.replace(/\[\/indent\]/gi, "");
     bbcode = bbcode.replace(/\[\/center\]/gi, "");
     bbcode = bbcode.replace(/\[\/right\]/gi, "");
@@ -330,7 +336,12 @@ var update = function(instance, properties, context) {
     bbcode = bbcode.replace(/\[img width=(.*?)\](.*?)\[\/img\]/gmi, '<img src="$2" width="$1">');
     bbcode = bbcode.replace(/\[img\](.*?)\[\/img\]/gmi, '<img src="$1">');
     bbcode = bbcode.replace(/\[url=(.*?)\](.*?)\[\/url\]/gi, '<a href="$1" target="_blank">$2</a>');
-    bbcode = bbcode.replace(/\[youtube\](.*?)\[\/youtube\]/gi, '<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://www.youtube.com/embed/$1?showinfo=0">');
+    bbcode = bbcode.replace(/\[youtube\](.*?)\[\/youtube\]/gi, '<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="https://www.youtube.com/embed/$1?showinfo=0"></iframe>');
+    bbcode = bbcode.replace(/\[video\](.*?)\[\/video\]/gi, '<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="$1"></iframe>');
+
+    //new line conversion is way down here because it needs to happen after digesting all closing header + \n
+    bbcode = bbcode.replace(/\n/gi, "<br>");
+
     return bbcode;
   }
 
@@ -351,8 +362,15 @@ var update = function(instance, properties, context) {
     }
   }
 
-
   $(document).ready(() => {
+    if((typeof(instance.data.prev_theme) !== undefined && instance.data.prev_theme !== properties.theme) ||
+		(typeof(instance.data.prev_complexity) !== undefined && instance.data.prev_complexity !== properties.complexity)) {
+      instance.data.initialized = false;
+      instance.canvas.empty()
+    }
+
+    instance.data.prev_theme = properties.theme
+    instance.data.prev_complexity = properties.complexity
     if (!instance.data.initialized) {
       var id, theme, toolbar, quill;
 
@@ -426,6 +444,22 @@ var update = function(instance, properties, context) {
 
       //add Quill container div to page
       instance.canvas.append(`<div id="${id}"></div>`);
+
+      // Hack the clipboard to bypass the annoying re-focus
+      // which centers the top of the Quill container after paste
+      const Clipboard = Quill.import('modules/clipboard');
+      class ForceScrollClipboard extends Clipboard {
+        onPaste(e) {
+          const scrollTop = window.scrollY;
+          const scrollLeft = window.scrollX;
+          Clipboard.prototype.onPaste.call(this, e);
+          // Shitty hack because the bad focus from above happens on a setTimeout too
+          setTimeout(() => window.scrollTo(scrollLeft, scrollTop), 1);
+        }
+      }
+      Quill.register('modules/clipboard', ForceScrollClipboard, true);
+
+
       //initialize Quill
       quill = new Quill('#'+id, {
         theme: theme,
@@ -453,13 +487,19 @@ var update = function(instance, properties, context) {
       instance.data.toolbar_height = 0;
       var bubble_height = properties.bubble.height;
 
+      const quill_editor_root = $(quill.root)
+      // Sizing includes padding, which causes tiny overflow when height extends
+      quill_editor_root.css('overflow-y', properties.overflow ? 'hidden' : 'auto')
+
       if (properties.theme === "Regular") {
         var toolbar_height = Number($('#'+id).siblings('.ql-toolbar').css('height').replace(/px/gmi, "")) - 10;
         instance.data.toolbar_height = toolbar_height;
-        if(!properties.overflow){
+
+        if (!properties.overflow) {
           bubble_height = bubble_height - 15;
         }
-        $(quill.root).parent().css('height', (bubble_height - toolbar_height) + "px");
+
+        quill_editor_root.parent().css('height', (bubble_height - toolbar_height) + "px");
         $('.ql-header').addClass('regular-header-icon');
       } else {
         $('.ql-header').addClass('tooltip-header-icon');
@@ -560,20 +600,24 @@ var update = function(instance, properties, context) {
     if (!instance.data.initial_content_loaded) {
       quill = instance.data.quill;
       if (properties.initial_content) {
-        if (instance.data.current_bbcode !== properties.initial_content) {
-          var initial_html = bbCodeToHTML(properties.initial_content);
-          var current_selection = quill.getSelection()
-          var scrollTop = window.scrollY
-          var scrollLeft = window.scrollX
-          $(quill.root).html("");
-          // Pasting the contents programmatically focuses the editor and sets
-          // the cursor to the end, which breaks autobinding and is weird UX,
-          // so restoring initial selection below
-          quill.clipboard.dangerouslyPasteHTML(0, initial_html);
-          quill.setSelection(current_selection)
-          // prevent paste-induced focus from autoscrolling to this position
-          window.scrollTo(scrollLeft, scrollTop)
-        }
+      // paste the HTML even if current_bbcode matches initial content, 
+      // to mitigate wrong initial content from persisting in editor if the data the RTE is autobinding to changes     
+        var initial_html = bbCodeToHTML(properties.initial_content);  
+        instance.data.initial_html = initial_html;
+		instance.data.initial_content = properties.initial_content;
+          
+        var current_selection = quill.getSelection();
+        var scrollTop = window.scrollY;
+        var scrollLeft = window.scrollX;
+        $(quill.root).html("");
+        // Pasting the contents programmatically focuses the editor and sets
+        // the cursor to the end, which breaks autobinding and is weird UX,
+        // so restoring initial selection below
+        quill.clipboard.dangerouslyPasteHTML(0, initial_html);
+        quill.setSelection(current_selection);
+        // prevent paste-induced focus from autoscrolling to this position
+        window.scrollTo(scrollLeft, scrollTop);
+
         if(properties.overflow && !properties.initial_content.includes('[/img]')){
           instance.setHeight(calculateHeight(quill,instance.data.initial_height, instance.data.toolbar_height));
         }
@@ -600,9 +644,26 @@ var update = function(instance, properties, context) {
 
     quill = instance.data.quill;
 
+    //positions the image resize module correctly when scrolling
+    $(quill.root).on('scroll', () => {
+      var resize_obj = $(`#${instance.data.id}`).children()[3];
+      if (resize_obj && !resize_obj.hidden){
+        quill.theme.modules.imageResize.repositionElements();
+      }
+    });
+      
+    //if image is resized, updates the value right away instead of waiting for the doneTypingInterval timer  
+    $(`#${instance.data.id}`).mouseup(() => {
+      if ($(`#${instance.data.id}`).children()[3]){
+        doneTyping();
+      }
+    });
+      
     //handles text changes and blur events
     var set_val = () => {
       $.when(htmlToBBCode(quill.root.innerHTML)).done((html_to_bbcode) => {
+        // removes excess line feed inserted by quill, otherwise :number of characters if off by 1
+        html_to_bbcode = html_to_bbcode.replace(/\n$/, '');
         instance.data.current_bbcode = html_to_bbcode
         content_change_handler(html_to_bbcode);
       });
@@ -634,14 +695,24 @@ var update = function(instance, properties, context) {
     }
 
     $('.ql-toolbar').mousedown(e => e.preventDefault());
-
-
+    
 
     //actions to be run whenever the Quill text is changed
     quill.on('text-change', function(delta, oldDelta, source) {
       instance.data.should_rerun_val = true;
+      instance.data.prev_contents = quill.getContents()
+      instance.data.should_rerun_val = true;
       clearTimeout(typingTimer);
       typingTimer = setTimeout(doneTyping, doneTypingInterval);
+
+      if (quill.theme.modules.imageResize.overlay && !instance.data.has_resize_listener) {
+        instance.data.has_resize_listener = true
+        $(quill.theme.modules.imageResize.overlay)
+          .one('mouseup', () => {
+            doneTyping()
+            instance.data.has_resize_listener = false
+          })
+      }
 
       $(quill.root).find('img').load(() => {
         if (properties.overflow){
@@ -656,7 +727,7 @@ var update = function(instance, properties, context) {
 
       var base64ImageRegex = /<img[^>]* src="data:image\/(.*?)"(.*?)>/gi;
       var matches = rawhtml.match(base64ImageRegex) || [];
-        
+
       var img_change = false;
       if (matches.length !== instance.data.img_tracker) {
         img_change = true;
@@ -695,5 +766,6 @@ var update = function(instance, properties, context) {
       }
 
     });
+    quill.setContents(instance.data.prev_contents)
   });
 }
